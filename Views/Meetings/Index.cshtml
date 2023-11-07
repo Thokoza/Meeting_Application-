@@ -1,0 +1,57 @@
+﻿@model IEnumerable<MeetingApp2.Models.MeetingViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>List of Meetings</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+@if (Model == null)
+{
+    <div class="question-summary">
+        <p>No data yet</p>
+    </div>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.MeetingType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MeetingItems)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MeetingType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MeetingItems)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.MeetingsID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.MeetingsID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.MeetingsID">Delete</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+

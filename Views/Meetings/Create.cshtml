@@ -1,0 +1,162 @@
+﻿@model MeetingApp2.Models.Meeting
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create New Meeting</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                    <label asp-for="Date" class="control-label"></label>
+                    <input asp-for="Date" class="form-control"  />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MeetingType" class="control-label"></label>
+                <select class="form-control" asp-for="MeetingType" asp-items="ViewBag.MeetingTypes">
+                    <option value="0">Select Meeting Type</option>
+                </select>
+                <span asp-validation-for="MeetingType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <table id="meetingItem" class="table">
+                    <thead>
+                        <tr>
+                            <td>Description</td>
+                            <td>Duration</td>
+                            <td>Person Responsible</td>
+                            <td>Item Status</td>
+                        </tr>
+                    </thead>
+                    <tbody class="table" id="tblbody">
+                        @if (Model == null || Model.MeetingItems == null || Model.MeetingItems.Count == 0)
+                        {
+                            <tr>
+                                <td class="hide">
+                                    <input type="hidden" name="MeetingItems[0].MeetingsID" />
+                                </td>
+                                <td>
+                                    <input id="Description" class="form-control description" type="text" name="MeetingItems[0].Description" />
+                                </td>
+                                <td>
+                                    <input id="Duration" class="form-control duration" type="number" name="MeetingItems[0].Duration" />
+                                </td>
+                                <td>
+                                    <input id="PersonResponsible" class="form-control personresponsible" type="text" name="MeetingItems[0].PersonResponsible" />
+                                </td>
+                                <td>
+                                    <select id="ItemStatus" class="form-control itemstatus" name="MeetingItems[0].ItemStatus" asp-items="ViewBag.ItemStatus">
+                                        <option value="0">Select Item Status</option>
+                                    </select>
+                                </td>
+                                <td><input type="button" class="btnremove btn btn-danger" value="Remove" onclick="Remove(this)" /></td>
+                                <td><input type="button" class="btnedit btn btn-warning" value="edit" /></td>
+                            </tr>
+                        }
+                        else if (Model.MeetingItems != null && Model.MeetingItems.Count > 0)
+                        {
+                            @for (var i = 0; i < Model.MeetingItems.Count; i++)
+                            {
+
+                                <tr>
+                                    <td class="hide">
+                                        <input type="hidden" asp-for="@Model.MeetingItems[0].MeetingsID" />
+                                    </td>
+                                    <td>
+                                        <input id="Description" class="form-control" asp-for="@Model.MeetingItems[@i].Description" />
+                                    </td>
+                                    <td>
+                                        <input id="Duration" class="form-control" asp-for="@Model.MeetingItems[@i].Duration" />
+                                    </td>
+                                    <td>
+                                        <input id="PersonResponsible" class="form-control" asp-for="@Model.MeetingItems[@i].PersonResponsible" />
+                                    </td>
+                                    <td>
+                                        <input id="ItemStatus" class="form-control" asp-for="@Model.MeetingItems[@i].MeetingItemStatus" />
+                                    </td>
+                                 <td><input type="button" class="btnremove btn btn-danger" value="Remove" onclick="Remove(this)" /></td>
+                                <td><input type="button" class="btnedit btn btn-warning" value="edit" /></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2"><input type="button" id="btnAddNew" value="Add New Item" class="btn btn-secondary" /></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
+
+
+    <script>
+        //$(function () {
+        //    $("#date").datetimepicker();
+        //});
+
+        $("body").on("click", "#btnAddNew", function () {
+            var description = $("#Description");
+            var duration = $("#Duration");
+            var personResponsible = $("#Personresponsible");
+            var Status = $("#Itemstatus");
+            var tBody = $("#meetingItem > TBODY")[0];
+            var row = tBody.insertRow(-1);
+            var cell = $(row.insertCell(-1));
+            cell.html(description.val());
+            cell = $(row.insertCell(-1));
+            cell.html(duration.val());
+            cell = $(row.insertCell(-1));
+            cell.html(personResponsible.val());
+            cell = $(row.insertCell(-1));
+            cell.html(Status.val());
+            cell = $(row.insertCell(-1));
+            var btnRemove = $("<input />");
+            btnRemove.attr("type", "button");
+            btnRemove.attr("class", "btnremove btn-danger");
+            btnRemove.attr("onclick", "Remove(this);");
+            btnRemove.val("Remove");
+            cell.append(btnRemove);
+            description.val("");
+            duration.val("");
+            personResponsible.val("");
+            Status.val("");
+        });
+
+        function Remove(button) {
+            var row = $(button).closest("TR");
+            var description = $("TD", row).eq(0).html();
+            if (confirm("Do you want to delete: " + description)) {
+                var table = $("#tblbody")[0];
+                table.deleteRow(row[0].rowIndex);
+            }
+        };
+
+        /**/
+    </script>
+}

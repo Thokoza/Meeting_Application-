@@ -1,0 +1,60 @@
+﻿@model MeetingApp2.Models.MeetingViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+    <h4>Meeting</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MeetingType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MeetingType)
+        </dd>
+    </dl>
+    <div class="form-group">
+        <h6>Meeting Items</h6>
+        <table id="meetingItem" class="table">
+            <thead>
+                <tr>
+                    <td>Description</td>
+                    <td>Duration</td>
+                    <td>Person Responsible</td>
+                    <td>Item Status</td>
+                </tr>
+            </thead>
+            <tbody class="table" id="tblbody">
+                @foreach (var Mitem in Model.MeetingItems)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => Mitem.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Mitem.Duration)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Mitem.PersonResponsible)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => Mitem.MeetingItemStatus)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.MeetingsID">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
